@@ -35,6 +35,9 @@ public class MajoritySleeping extends JavaPlugin {
         //Add event listeners
         new SleepListeners(instance);
         new AFKListeners(instance);
+        
+        //Commands
+        new AFKCommand(instance);
     }
     
     public void addSleepingPlayer(Player p) {

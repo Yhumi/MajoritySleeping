@@ -6,6 +6,7 @@
 package me.nicole.majoritysleeping.runnable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import me.nicole.majoritysleeping.MajoritySleeping;
 import net.md_5.bungee.api.ChatColor;
@@ -19,6 +20,7 @@ import org.bukkit.entity.Player;
 public class AFKRunnable implements Runnable {
     MajoritySleeping instance;
     Map<Player, Integer> afkList;
+    List<Player> afkAnnounced;
     
     /**
      * Constructor
@@ -45,8 +47,9 @@ public class AFKRunnable implements Runnable {
             afkList.replace(p, afkSeconds);
             
             //Alert the server they are AFK if their time is over 
-            if (afkSeconds >= instance.getTime()) {
+            if (afkSeconds >= instance.getTime() && !afkAnnounced.contains(p)) {
                 instance.getServer().broadcastMessage(String.format("%s%s has gone AFK.", ChatColor.LIGHT_PURPLE, p.getName()));
+                afkAnnounced.add(p);
             }
         }
     }
@@ -55,6 +58,7 @@ public class AFKRunnable implements Runnable {
         //If they were AFK
         if (afkList.getOrDefault(p, 0) >= instance.getTime()) {
             instance.getServer().broadcastMessage(String.format("%s%s is no longer AFK.", ChatColor.LIGHT_PURPLE, p.getName()));
+            afkAnnounced.remove(p);
         }
         
         //Replace them
@@ -71,5 +75,12 @@ public class AFKRunnable implements Runnable {
     
     public void removePlayer(Player p) {
         afkList.remove(p);
+        if (afkAnnounced.contains(p)) afkAnnounced.remove(p);
+    }
+    
+    public void setAFK(Player p) {
+        afkList.replace(p, 300);
+        instance.getServer().broadcastMessage(String.format("%s%s has gone AFK.", ChatColor.LIGHT_PURPLE, p.getName()));
+        afkAnnounced.add(p);
     }
 }
