@@ -5,6 +5,7 @@
  */
 package me.nicole.majoritysleeping.runnable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ public class AFKRunnable implements Runnable {
     public AFKRunnable(MajoritySleeping instance) {
         this.instance = instance;
         this.afkList = new HashMap<Player, Integer>();
+        this.afkAnnounced = new ArrayList<Player>();
         
         Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(instance, this, 0L, 20L);
     }
