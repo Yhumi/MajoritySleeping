@@ -1,0 +1,5 @@
+main: me.nicole.majoritysleeping.MajoritySleeping
+name: MajoritySleep
+version: 0.1
+author: CyNicole
+description: Checks to ensure a majority of players are sleeping before executing a sleep.
