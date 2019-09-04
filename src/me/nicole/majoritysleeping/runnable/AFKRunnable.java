@@ -52,6 +52,9 @@ public class AFKRunnable implements Runnable {
             if (afkSeconds >= instance.getTime() && !afkAnnounced.contains(p)) {
                 instance.getServer().broadcastMessage(String.format("%s%s has gone AFK.", ChatColor.LIGHT_PURPLE, p.getName()));
                 afkAnnounced.add(p);
+                
+                //re-calculate sleep
+                instance.forceWorldCheck(p.getWorld());
             }
         }
     }
@@ -61,6 +64,9 @@ public class AFKRunnable implements Runnable {
         if (afkList.getOrDefault(p, 0) >= instance.getTime()) {
             instance.getServer().broadcastMessage(String.format("%s%s is no longer AFK.", ChatColor.LIGHT_PURPLE, p.getName()));
             afkAnnounced.remove(p);
+            
+            //re-calculate sleep
+            instance.forceWorldCheck(p.getWorld());
         }
         
         //Replace them
@@ -84,5 +90,8 @@ public class AFKRunnable implements Runnable {
         afkList.replace(p, 300);
         instance.getServer().broadcastMessage(String.format("%s%s has gone AFK.", ChatColor.LIGHT_PURPLE, p.getName()));
         afkAnnounced.add(p);
+        
+        //re-calculate sleep
+        instance.forceWorldCheck(p.getWorld());
     }
 }

@@ -7,11 +7,13 @@ package me.nicole.majoritysleeping.listeners;
 
 import me.nicole.majoritysleeping.MajoritySleeping;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -69,6 +71,19 @@ public class SleepListeners implements Listener {
                 
                 //Remove them from AFK 
                 instance.getAFK().removePlayer(e.getPlayer());
+            }
+        }, 5L);
+    }
+    
+    @EventHandler
+    public void onChangeWorld(PlayerChangedWorldEvent e) {
+        //Delay the task momentarily 
+        Bukkit.getServer().getScheduler().runTaskLater(instance, new Runnable() {
+            @Override
+            public void run() {
+                //Force re-check in both worlds
+                instance.forceWorldCheck(e.getFrom());
+                instance.forceWorldCheck(e.getPlayer().getWorld());
             }
         }, 5L);
     }
