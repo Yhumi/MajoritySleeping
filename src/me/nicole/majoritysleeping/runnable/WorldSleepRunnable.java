@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package me.nicole.majoritysleeping;
+package me.nicole.majoritysleeping.runnable;
 
 import java.util.ArrayList;
 import java.util.List;
+import me.nicole.majoritysleeping.MajoritySleeping;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -44,7 +45,7 @@ public class WorldSleepRunnable implements Runnable {
         this.sleepingPlayersInWorld.add(p);
         
         //Broadcast to the world
-        world.getPlayers().forEach(player -> player.sendMessage(String.format("%s%s has entered a bed (%s/%s)", ChatColor.LIGHT_PURPLE, p.getName(), sleepingPlayersInWorld.size(), world.getPlayers().size())));
+        world.getPlayers().forEach(player -> player.sendMessage(String.format("%s%s has entered a bed (%s/%s)", ChatColor.LIGHT_PURPLE, p.getName(), sleepingPlayersInWorld.size(), activeCount())));
         
         //Perform sleepcheck
         performSleepCheck();
@@ -56,19 +57,27 @@ public class WorldSleepRunnable implements Runnable {
     
     public void performSleepCheck() {
         //Check to see if the player count for this world has matched up
-        int majorityTarget = ((int) Math.floor(world.getPlayers().size() / 2)) + 1;
+        int majorityTarget = ((int) Math.floor(activeCount() / 2)) + 1;
         
         //If there's nobody around, or nobody sleeping, we're good
-        if (sleepingPlayersInWorld.size() == 0 || world.getPlayers().size() == 0) return;
-        
-        instance.getServer().getLogger().info("Target: " + majorityTarget + " | Count: " + sleepingPlayersInWorld.size());
+        if (sleepingPlayersInWorld.size() == 0 || activeCount() == 0 || world.getPlayers().size() == 0) return;
         
         if (sleepingPlayersInWorld.size() >= majorityTarget) {
             //Broadcast to the world
-            world.getPlayers().forEach(player -> player.sendMessage(String.format("%sThe majority of players in the world are in bed, executing a sleep cycle in 5 seconds.", ChatColor.LIGHT_PURPLE)));
+            world.getPlayers().forEach(player -> player.sendMessage(String.format("%sThe majority of active players in the world are in bed, executing a sleep cycle in 5 seconds.", ChatColor.LIGHT_PURPLE)));
             
             //Run this after 100 ticks
             Bukkit.getServer().getScheduler().runTaskLater((Plugin) instance, this, 100L);
         }
+    }
+    
+    private int activeCount() {
+        int out = 0;
+        for (Player p : world.getPlayers()) {
+            if (!instance.getAFK().isPlayerAFK(p, instance.getTime())) {
+                out++;
+            }
+        }
+        return out;
     }
 }

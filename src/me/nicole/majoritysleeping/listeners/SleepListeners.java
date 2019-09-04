@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package me.nicole.majoritysleeping;
+package me.nicole.majoritysleeping.listeners;
 
+import me.nicole.majoritysleeping.MajoritySleeping;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -41,13 +42,14 @@ public class SleepListeners implements Listener {
     }
     
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent e) {
-        instance.getServer().getLogger().info("Player Join");
-        
+    public void onPlayerJoin(PlayerJoinEvent e) {       
         //Check if they're sleeping
         if (e.getPlayer().isSleeping()) {
             instance.addSleepingPlayer(e.getPlayer());
         }
+        
+        //Add player
+        instance.getAFK().addPlayer(e.getPlayer());
     }
     
     @EventHandler
@@ -56,9 +58,6 @@ public class SleepListeners implements Listener {
         Bukkit.getServer().getScheduler().runTaskLater(instance, new Runnable() {
             @Override
             public void run() {
-                //hmm
-                instance.getServer().getLogger().info("Player sleeping: " + e.getPlayer().isSleeping() + " | World: " + e.getPlayer().getWorld().getName());
-
                 //Check if they're asleep
                 if (e.getPlayer().isSleeping()) {
                     //Remove them from the sleep list if they are
@@ -67,6 +66,9 @@ public class SleepListeners implements Listener {
                     //Just force a world check otherwise
                     instance.forceWorldCheck(e.getPlayer().getWorld());
                 }
+                
+                //Remove them from AFK 
+                instance.getAFK().removePlayer(e.getPlayer());
             }
         }, 5L);
     }

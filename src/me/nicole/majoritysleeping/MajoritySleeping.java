@@ -5,8 +5,11 @@
  */
 package me.nicole.majoritysleeping;
 
+import me.nicole.majoritysleeping.listeners.SleepListeners;
+import me.nicole.majoritysleeping.runnable.WorldSleepRunnable;
 import java.util.HashMap;
 import java.util.Map;
+import me.nicole.majoritysleeping.runnable.AFKRunnable;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,11 +21,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class MajoritySleeping extends JavaPlugin {
     MajoritySleeping instance;
     Map<World, WorldSleepRunnable> worldDict;
+    AFKRunnable afk;
+    int afktime;
     
     public void onEnable() {
         //Class variables
         instance = this;
         worldDict = new HashMap<World, WorldSleepRunnable>();
+        afktime = 300;
+        afk = new AFKRunnable(instance);    
         
         //Add event listeners
         new SleepListeners(instance);
@@ -62,5 +69,13 @@ public class MajoritySleeping extends JavaPlugin {
         
         //Force the world check
         worldDict.get(w).performSleepCheck();
+    }
+    
+    public AFKRunnable getAFK() {
+        return afk;
+    }
+
+    public int getTime() {
+        return afktime;
     }
 }
