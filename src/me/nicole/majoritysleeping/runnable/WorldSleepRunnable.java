@@ -32,7 +32,7 @@ public class WorldSleepRunnable implements Runnable {
     @Override
     public void run() {
         //Check to ensure that the sleep count matches up still
-        if (sleepingPlayersInWorld.size() < ((int) Math.floor(world.getPlayers().size() / 2)) + 1) return;
+        if (sleepingPlayersInWorld.size() < ((int) Math.floor(activeCount() / 2)) + 1) return;
         
         //Skip time & weather
         world.setTime(0L);

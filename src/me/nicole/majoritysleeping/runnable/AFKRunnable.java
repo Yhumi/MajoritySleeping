@@ -61,16 +61,18 @@ public class AFKRunnable implements Runnable {
     
     public void resetPlayer(Player p) {
         //If they were AFK
+        boolean checkWorld = false;
         if (afkList.getOrDefault(p, 0) >= instance.getTime()) {
             instance.getServer().broadcastMessage(String.format("%s%s is no longer AFK.", ChatColor.LIGHT_PURPLE, p.getName()));
             afkAnnounced.remove(p);
-            
-            //re-calculate sleep
-            instance.forceWorldCheck(p.getWorld());
+            checkWorld = true;
         }
         
         //Replace them
         afkList.replace(p, 0);
+        
+        //re-calculate sleep if needed
+        if (checkWorld) instance.forceWorldCheck(p.getWorld());
     }
     
     public boolean isPlayerAFK(Player p, int seconds) {
