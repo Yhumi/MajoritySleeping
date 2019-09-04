@@ -9,6 +9,7 @@ import me.nicole.majoritysleeping.listeners.SleepListeners;
 import me.nicole.majoritysleeping.runnable.WorldSleepRunnable;
 import java.util.HashMap;
 import java.util.Map;
+import me.nicole.majoritysleeping.listeners.AFKListeners;
 import me.nicole.majoritysleeping.runnable.AFKRunnable;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -33,6 +34,7 @@ public class MajoritySleeping extends JavaPlugin {
         
         //Add event listeners
         new SleepListeners(instance);
+        new AFKListeners(instance);
     }
     
     public void addSleepingPlayer(Player p) {
