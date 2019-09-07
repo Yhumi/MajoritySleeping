@@ -24,7 +24,7 @@ public class AFKListeners implements Listener {
         this.instance = instance;
     }
     
-    @EventHandler
+    /*@EventHandler
     public void onMove(PlayerMoveEvent e) {
         instance.getAFK().resetPlayer(e.getPlayer());
     }
@@ -32,7 +32,7 @@ public class AFKListeners implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
         instance.getAFK().resetPlayer(e.getPlayer());
-    }
+    }*/
     
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {

@@ -33,7 +33,7 @@ public class MajoritySleeping extends JavaPlugin {
         afk = new AFKRunnable(instance);    
         
         //Add event listeners
-        new SleepListeners(instance);
+        new SleepListeners(instance);        
         new AFKListeners(instance);
         
         //Commands
