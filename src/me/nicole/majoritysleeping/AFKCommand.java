@@ -25,7 +25,8 @@ public class AFKCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender cs, Command cmnd, String string, String[] strings) {
         if (cs instanceof Player) {
-            Player player = (Player) cs;           
+            Player player = (Player) cs;
+            if (player.isSleeping()) return true;
             instance.getAFK().setAFK(player);
         }       
         return true;
